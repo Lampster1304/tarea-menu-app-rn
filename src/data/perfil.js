@@ -18,5 +18,5 @@ export const perfil = {
   foto: require('../../assets/foto.jpg'),
 
   // Enlace del video de YouTube de tu experiencia personal:
-  videoUrl: '',
+  videoUrl: 'https://youtu.be/tP_W5ilNi8w',
 }

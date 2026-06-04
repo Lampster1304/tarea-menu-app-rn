@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { WebView } from 'react-native-webview'
+import YoutubePlayer from 'react-native-youtube-iframe'
 import { perfil } from '../data/perfil'
 import { colores, estilos } from '../theme'
 
@@ -24,6 +25,7 @@ export default function ExperienciaScreen() {
   const videoId = obtenerIdYouTube(perfil.videoUrl)
   const ancho = Dimensions.get('window').width - 40 - 44 // pantalla - padding - card
   const alto = (ancho * 9) / 16
+  const [listo, setListo] = useState(false)
 
   return (
     <ScrollView style={estilos.pantalla} contentContainerStyle={estilos.contenido}>
@@ -32,12 +34,12 @@ export default function ExperienciaScreen() {
 
       <View style={estilos.card}>
         {videoId ? (
-          <View style={[s.video, { height: alto }]}>
-            <WebView
-              style={{ flex: 1 }}
-              source={{ uri: `https://www.youtube.com/embed/${videoId}` }}
-              allowsFullscreenVideo
-              javaScriptEnabled
+          <View style={s.video}>
+            <YoutubePlayer
+              height={alto}
+              videoId={videoId}
+              webViewProps={{ allowsInlineMediaPlayback: true }}
+              onReady={() => setListo(true)}
             />
           </View>
         ) : (

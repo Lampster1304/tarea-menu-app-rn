@@ -15,7 +15,8 @@
     "react-native-reanimated": "4.3.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
-    "react-native-webview": "13.16.1"
+    "react-native-webview": "13.16.1",
+    "react-native-youtube-iframe": "^2.4.1"
   },
   "scripts": {
     "start": "expo start",

@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View, Dimensions } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 import { WebView } from 'react-native-webview'
 import { perfil } from '../data/perfil'
 import { colores, estilos } from '../theme'
@@ -41,7 +42,12 @@ export default function ExperienciaScreen() {
           </View>
         ) : (
           <View style={s.pendiente}>
-            <Text style={s.icono}>🎬</Text>
+            <Ionicons
+              name="videocam-outline"
+              size={52}
+              color={colores.gris}
+              style={{ marginBottom: 12 }}
+            />
             <Text style={s.pendienteTexto}>
               Aún no hay enlace del video.{'\n'}
               Pégalo en{' '}
@@ -65,10 +71,6 @@ const s = StyleSheet.create({
   pendiente: {
     alignItems: 'center',
     paddingVertical: 36,
-  },
-  icono: {
-    fontSize: 46,
-    marginBottom: 12,
   },
   pendienteTexto: {
     textAlign: 'center',

@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { Text } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
 
 import InicioScreen from './src/screens/InicioScreen'
 import SumadoraScreen from './src/screens/SumadoraScreen'
@@ -14,9 +14,11 @@ import { colores } from './src/theme'
 
 const Drawer = createDrawerNavigator()
 
-// Ícono de cada opción del menú (emoji simple, sin librerías extra)
-function icono(emoji) {
-  return ({ size }) => <Text style={{ fontSize: (size ?? 22) - 2 }}>{emoji}</Text>
+// Ícono vectorial (Ionicons) para cada opción del menú
+function icono(nombre) {
+  return ({ color, size }) => (
+    <Ionicons name={nombre} size={size ?? 22} color={color} />
+  )
 }
 
 export default function App() {
@@ -38,27 +40,27 @@ export default function App() {
           <Drawer.Screen
             name="Inicio"
             component={InicioScreen}
-            options={{ title: 'Página Inicial', drawerIcon: icono('🏠') }}
+            options={{ title: 'Página Inicial', drawerIcon: icono('home-outline') }}
           />
           <Drawer.Screen
             name="Sumadora"
             component={SumadoraScreen}
-            options={{ title: 'Sumadora', drawerIcon: icono('➕') }}
+            options={{ title: 'Sumadora', drawerIcon: icono('add-circle-outline') }}
           />
           <Drawer.Screen
             name="Traductor"
             component={TraductorScreen}
-            options={{ title: 'Números a Letras', drawerIcon: icono('🔤') }}
+            options={{ title: 'Números a Letras', drawerIcon: icono('language-outline') }}
           />
           <Drawer.Screen
             name="Tabla"
             component={TablaScreen}
-            options={{ title: 'Tabla de Multiplicar', drawerIcon: icono('✖️') }}
+            options={{ title: 'Tabla de Multiplicar', drawerIcon: icono('grid-outline') }}
           />
           <Drawer.Screen
             name="Experiencia"
             component={ExperienciaScreen}
-            options={{ title: 'Experiencia Personal', drawerIcon: icono('🎬') }}
+            options={{ title: 'Experiencia Personal', drawerIcon: icono('videocam-outline') }}
           />
         </Drawer.Navigator>
       </NavigationContainer>

@@ -49,6 +49,40 @@ def hacer_qr(data):
     return ImageReader(buf)
 
 
+def dibujar_url(c, url, x, y, ancho_max, fuente="Helvetica", size=9, salto=0.42 * cm):
+    """Dibuja una URL ajustándola en varias líneas según el ancho disponible."""
+    c.setFont(fuente, size)
+    linea = ""
+    lineas = []
+    for ch in url:
+        if c.stringWidth(linea + ch, fuente, size) <= ancho_max:
+            linea += ch
+        else:
+            lineas.append(linea)
+            linea = ch
+    if linea:
+        lineas.append(linea)
+    for i, ln in enumerate(lineas):
+        c.drawString(x, y - i * salto, ln)
+
+
+def seccion_qr(c, x, titulo, url, sec_y, qr_lado, ancho_col):
+    """Dibuja un bloque: título, QR y la URL ajustada debajo."""
+    c.setFillColor(AZUL_OSC)
+    c.setFont("Helvetica-Bold", 15)
+    c.drawString(x, sec_y, titulo)
+
+    qy = sec_y - qr_lado - 0.5 * cm
+    c.drawImage(hacer_qr(url), x, qy, qr_lado, qr_lado)
+
+    c.setFillColor(GRIS)
+    c.setFont("Helvetica", 9)
+    c.drawString(x, qy - 0.6 * cm, "Escanea el QR o entra a:")
+
+    c.setFillColor(AZUL)
+    dibujar_url(c, url, x, qy - 1.15 * cm, ancho_col)
+
+
 def main():
     c = canvas.Canvas(SALIDA, pagesize=letter)
     W, H = letter
@@ -94,39 +128,24 @@ def main():
     c.setLineWidth(1)
     c.line(2 * cm, H - 9.6 * cm, W - 2 * cm, H - 9.6 * cm)
 
-    # Sección repositorio
-    sec_y = H - 11 * cm
-    c.setFillColor(AZUL_OSC)
-    c.setFont("Helvetica-Bold", 15)
-    c.drawString(2 * cm, sec_y, "Repositorio del código")
-
     qr_lado = 4 * cm
-    c.drawImage(hacer_qr(REPO_URL), 2 * cm, sec_y - qr_lado - 0.5 * cm,
-                qr_lado, qr_lado)
-    c.setFillColor(GRIS)
-    c.setFont("Helvetica", 9)
-    c.drawString(2 * cm, sec_y - qr_lado - 1.1 * cm, "Escanea el QR")
-    c.setFillColor(AZUL)
-    c.setFont("Helvetica", 10)
-    c.drawString(2 * cm + qr_lado + 0.6 * cm, sec_y - 1.2 * cm, REPO_URL)
-
-    # Sección video
+    sec_y = H - 11 * cm
     vid_x = W / 2 + 1 * cm
-    c.setFillColor(AZUL_OSC)
-    c.setFont("Helvetica-Bold", 15)
-    c.drawString(vid_x, sec_y, "Video de la experiencia")
+    ancho_repo = vid_x - 0.6 * cm - 2 * cm      # columna izquierda
+    ancho_video = (W - 2 * cm) - vid_x          # columna derecha
 
+    # Sección: repositorio del código
+    seccion_qr(c, 2 * cm, "Repositorio del código", REPO_URL,
+               sec_y, qr_lado, ancho_repo)
+
+    # Sección: video de la experiencia
     if VIDEO_URL:
-        c.drawImage(hacer_qr(VIDEO_URL), vid_x, sec_y - qr_lado - 0.5 * cm,
-                    qr_lado, qr_lado)
-        c.setFillColor(GRIS)
-        c.setFont("Helvetica", 9)
-        c.drawString(vid_x, sec_y - qr_lado - 1.1 * cm, "Escanea el QR")
-        c.setFillColor(AZUL)
-        c.setFont("Helvetica", 10)
-        link = VIDEO_URL if len(VIDEO_URL) < 32 else VIDEO_URL[:30] + "..."
-        c.drawString(vid_x + qr_lado + 0.6 * cm, sec_y - 1.2 * cm, link)
+        seccion_qr(c, vid_x, "Video de la experiencia", VIDEO_URL,
+                   sec_y, qr_lado, ancho_video)
     else:
+        c.setFillColor(AZUL_OSC)
+        c.setFont("Helvetica-Bold", 15)
+        c.drawString(vid_x, sec_y, "Video de la experiencia")
         c.setStrokeColor(GRIS)
         c.setLineWidth(1)
         c.setDash(4, 3)
